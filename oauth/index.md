@@ -1,0 +1,30 @@
+# OAuth 2.0
+
+- [フロー](./flow.md)
+
+## 参考
+
+- [The OAuth 2.0 Authorization Framework](https://datatracker.ietf.org/doc/html/rfc6749)
+- [The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)
+- [An IETF URN Sub-Namespace for OAuth](https://datatracker.ietf.org/doc/html/rfc6755)
+- [OAuth 2.0 Threat Model and Security Considerations](https://datatracker.ietf.org/doc/html/rfc6819)
+- [OAuth 2.0 Token Revocation](https://datatracker.ietf.org/doc/html/rfc7009)
+- [A Set of Simple Authentication and Security Layer (SASL) Mechanisms for OAuth](https://datatracker.ietf.org/doc/html/rfc7628)
+- [JSON Web Signature (JWS)](https://datatracker.ietf.org/doc/html/rfc7515)
+- [JSON Web Encryption (JWE)](https://datatracker.ietf.org/doc/html/rfc7516)
+- [JSON Web Key (JWK)](https://datatracker.ietf.org/doc/html/rfc7517)
+- [JSON Web Algorithms (JWA)](https://datatracker.ietf.org/doc/html/rfc7518)
+- [JSON Web Token (JWT)](https://datatracker.ietf.org/doc/html/rfc7519)
+- [Assertion Framework for OAuth 2.0 Client Authentication and Authorization Grants](https://datatracker.ietf.org/doc/html/rfc7521)
+- [Security Assertion Markup Language (SAML) 2.0 Profile for OAuth 2.0 Client Authentication and Authorization Grants](https://datatracker.ietf.org/doc/html/rfc7522)
+- [JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants](https://datatracker.ietf.org/doc/html/rfc7523)
+- [OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591)
+- [OAuth 2.0 Dynamic Client Registration Management Protocol](https://datatracker.ietf.org/doc/html/rfc7592)
+- [Proof Key for Code Exchange by OAuth Public Clients](https://datatracker.ietf.org/doc/html/rfc7636)
+- [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662)
+- [Proof-of-Possession Key Semantics for JSON Web Tokens (JWTs)](https://datatracker.ietf.org/doc/html/rfc7800)
+- [OAuth 2.0 for Native Apps](https://datatracker.ietf.org/doc/html/rfc8252)
+- [OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)
+- [OAuth 2.0 Device Authorization Grant](https://datatracker.ietf.org/doc/html/rfc8628)
+- [OAuth 2.0 Demonstrating Proof of Possession (DPoP)](https://datatracker.ietf.org/doc/html/rfc9449)
+- [Best Current Practice for OAuth 2.0 Security](https://datatracker.ietf.org/doc/html/rfc9700)
