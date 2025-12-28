@@ -174,6 +174,8 @@ curl -sS \
 }
 ```
 
+トークンについては [Json Web Token](./jwt.md) を参照する。
+
 ## Implicit Grant
 
 ## Resource Owner Password Credentials Grant
