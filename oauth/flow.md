@@ -7,7 +7,7 @@ Authorization Code Grant フローを記載する。
 - クライアント種別は confidential
 - アクセストークンの検証はイントロスペクション
 
-![Authorization Code Grant フロー](./oauth-flow-authorization-code-grant.png)
+![Authorization Code Grant フロー](./images/oauth-flow-authorization-code-grant.png)
 
 Keycloak を開発モードで起動する。
 
@@ -24,31 +24,31 @@ podman run \
 
 `http://127.0.0.1:8080/admin/` に接続して `admin` でログインする。
 
-![Authorization Code Grant 管理者ログイン](./oauth-flow-authorization-code-grant-keycloak-admin-login.png)
+![Authorization Code Grant 管理者ログイン](./images/oauth-flow-authorization-code-grant-keycloak-admin-login.png)
 
 レルムを作成する。
 
-![Authorization Code Grant レルム作成](./oauth-flow-authorization-code-grant-keycloak-admin-create-realm.png)
+![Authorization Code Grant レルム作成](./images/oauth-flow-authorization-code-grant-keycloak-admin-create-realm.png)
 
 ユーザを作成する。
 
-![Authorization Code Grant ユーザ作成](./oauth-flow-authorization-code-grant-keycloak-admin-create-user.png)
+![Authorization Code Grant ユーザ作成](./images/oauth-flow-authorization-code-grant-keycloak-admin-create-user.png)
 
 パスワードを設定する。
 
-![Authorization Code Grant パスワード設定](./oauth-flow-authorization-code-grant-keycloak-admin-set-passwordpng.png)
+![Authorization Code Grant パスワード設定](./images/oauth-flow-authorization-code-grant-keycloak-admin-set-passwordpng.png)
 
 `http://127.0.0.1:8080/realms/home.local/account/` に接続して `administrator` でログインする。
 
-![Authorization Code Grant ログイン](./oauth-flow-authorization-code-grant-keycloak-realm-login.png)
+![Authorization Code Grant ログイン](./images/oauth-flow-authorization-code-grant-keycloak-realm-login.png)
 
 クライアントを登録する。
 
-![Authorization Code Grant クライアント作成01](./oauth-flow-authorization-code-grant-keycloak-admin-create-client-01.png)
+![Authorization Code Grant クライアント作成01](./images/oauth-flow-authorization-code-grant-keycloak-admin-create-client-01.png)
 
-![Authorization Code Grant クライアント作成02](./oauth-flow-authorization-code-grant-keycloak-admin-create-client-02.png)
+![Authorization Code Grant クライアント作成02](./images/oauth-flow-authorization-code-grant-keycloak-admin-create-client-02.png)
 
-![Authorization Code Grant クライアント作成03](./oauth-flow-authorization-code-grant-keycloak-admin-create-client-03.png)
+![Authorization Code Grant クライアント作成03](./images/oauth-flow-authorization-code-grant-keycloak-admin-create-client-03.png)
 
 認可コードを要求する URL を生成する。
 
@@ -70,7 +70,7 @@ http://169.254.10.67:8080/realms/home.local/protocol/openid-connect/auth?respons
 
 上記の URL へ接続後に `administrator` でログインする。
 
-![Authorization Code Grant 認可承認](./oauth-flow-authorization-code-grant-keycloak-grant-login.png)
+![Authorization Code Grant 認可承認](./images/oauth-flow-authorization-code-grant-keycloak-grant-login.png)
 
 レスポンスの `Location` ヘッダに下記の設定される。
 
