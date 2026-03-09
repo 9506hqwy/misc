@@ -85,7 +85,7 @@ http://myapp.home.local/?state=abc&session_state=d4ea6dfb-d9bf-808f-2990-fbe93a0
 | iss           | http:://169.254.10.67:8080/realms/home.local                                                                   |
 | code          | 3b69d21b-9e2e-a45b-805e-0712c9f3ff70.d4ea6dfb-d9bf-808f-2990-fbe93a05e18b.8fd65429-d331-4be8-b79a-458eb27a1ab2 |
 
-アクセスコードを要求する。
+アクセストークンを要求する。
 
 ```sh
 GRANT_TYPE=authorization_code

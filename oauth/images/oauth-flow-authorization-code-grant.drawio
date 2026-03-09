@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.2.9">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.5.6">
   <diagram name="ページ1" id="jfdJJfSsgA--4H8G5Q8Q">
-    <mxGraphModel dx="1393" dy="752" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="512" pageHeight="512" math="0" shadow="0">
+    <mxGraphModel dx="1455" dy="776" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="512" pageHeight="512" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -53,7 +53,7 @@
             <mxPoint x="-575" y="1633.9999999999995" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-51" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="アクセスコード" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-51" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;div&gt;アクセス&lt;/div&gt;&lt;div&gt;トークン&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="-230" y="1397" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-52" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="リソース" vertex="1">
@@ -69,13 +69,13 @@
             <mxPoint x="-80" y="1474" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-62" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="アクセスコード" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-62" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;div&gt;アクセス&lt;/div&gt;&lt;div&gt;トークン&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="280" y="1459" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-42" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="リソース" vertex="1">
           <mxGeometry height="30" width="90" x="-690" y="1639" as="geometry" />
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-77" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="アクセスコード" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-77" parent="9QlkhuMI22M_KKFpDq92-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;div&gt;アクセス&lt;/div&gt;&lt;div&gt;トークン&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="400" y="1437" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-11" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};fillColor=#d5e8d4;strokeColor=#82b366;" value="リソースサーバ" vertex="1">
@@ -179,10 +179,10 @@
             <mxPoint x="185" y="1192" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-41" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="アクセスコード" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-41" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;div&gt;アクセス&lt;/div&gt;&lt;div&gt;トークン&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="70" y="1337" as="geometry" />
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-76" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="アクセスコード" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-76" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;div&gt;アクセス&lt;/div&gt;&lt;div&gt;トークン&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="840" y="1327" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-57" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="クライアントID" vertex="1">
@@ -199,7 +199,7 @@
             <mxPoint x="185" y="1332" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-49" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="アクセスコード" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-49" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;div&gt;アクセス&lt;/div&gt;&lt;div&gt;トークン&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="540" y="1287" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-80" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="ステート検証">
@@ -213,7 +213,7 @@
             <mxPoint x="185" y="1097" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-81" parent="1" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fillColor=#eeeeee;strokeColor=#36393d;align=left;" value="&lt;div&gt;アクセスコードを要求する前に&lt;/div&gt;&lt;div&gt;要求した認可コードかどうかを検証&lt;/div&gt;&lt;div&gt;&amp;nbsp;(CSRF 対策)&lt;/div&gt;" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-81" parent="1" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fillColor=#eeeeee;strokeColor=#36393d;align=left;" value="&lt;div&gt;アクセストークンを要求する前に&lt;/div&gt;&lt;div&gt;要求した認可コードかどうかを検証&lt;/div&gt;&lt;div&gt;&amp;nbsp;(CSRF 対策)&lt;/div&gt;" vertex="1">
           <mxGeometry height="72" width="220" x="210" y="967" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-46" edge="1" parent="1" source="9QlkhuMI22M_KKFpDq92-44" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" value="認可承認">
@@ -275,7 +275,7 @@
             <mxPoint x="825" y="1247" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9QlkhuMI22M_KKFpDq92-91" parent="1" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fillColor=#eeeeee;strokeColor=#36393d;align=left;" value="&lt;div&gt;code_verifier と code_challenge を&lt;/div&gt;&lt;div&gt;使用して認可コードを要求したクライアントと&lt;/div&gt;&lt;div&gt;アクセスコードを要求したクライアントが&lt;/div&gt;&lt;div&gt;同じかどうか検証&lt;/div&gt;&lt;div&gt;(PKCE)&lt;/div&gt;" vertex="1">
+        <mxCell id="9QlkhuMI22M_KKFpDq92-91" parent="1" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fillColor=#eeeeee;strokeColor=#36393d;align=left;" value="&lt;div&gt;code_verifier と code_challenge を&lt;/div&gt;&lt;div&gt;使用して認可コードを要求したクライアントと&lt;/div&gt;&lt;div&gt;アクセストークンを要求したクライアントが&lt;/div&gt;&lt;div&gt;同じかどうか検証&lt;/div&gt;&lt;div&gt;(PKCE)&lt;/div&gt;" vertex="1">
           <mxGeometry height="82" width="260" x="840" y="1117" as="geometry" />
         </mxCell>
         <mxCell id="9QlkhuMI22M_KKFpDq92-92" parent="1" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fillColor=#eeeeee;strokeColor=#36393d;align=left;" value="&lt;div&gt;不正なリダイレクト URI への&lt;/div&gt;&lt;div&gt;認可コード漏洩対策&lt;/div&gt;" vertex="1">
