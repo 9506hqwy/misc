@@ -219,7 +219,7 @@ lspci -vvv
 CXL コマンドをインストールする。
 
 ```sh
-dnf install cxl-cli　ndctl
+dnf install cxl-cli daxctl ndctl
 cxl version
 ```
 
@@ -490,6 +490,127 @@ Raw Table Data: Length 108 (0x6C)
     0060: 00 00 00 00 0F 00 00 00 0C 00 00 00              // ............
 ```
 
+### 不揮発性メモリ
+
+カーネルオプション `CONFIG_CXL_REGION_INVALIDATION_TEST` が無効になっているためカーネルをビルドする。
+
+ビルドに必要なパッケージをインストールする。
+
+```sh
+dnf install fedpkg
+
+fedpkg clone -a kernel
+cd kernel
+
+dnf builddep kernel.spec
+
+dnf install ccache
+```
+
+カーネルをビルドする。
+
+```sh
+git clone -b f44 --depth 1 https://src.fedoraproject.org/rpms/kernel.git src
+cd src
+
+cat >> kernel-local <<EOF
+CONFIG_CXL_REGION_INVALIDATION_TEST=yes
+EOF
+
+fedpkg local --arch x86_64 --without configchecks --with baseonly
+```
+
+```text
+[snip]
+
+書き込みが完了しました: /root/workspace/src/kernel-7.0.9-205.fc44.src.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-modules-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-uki-virt-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-core-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-devel-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-modules-extra-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-modules-internal-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-uki-virt-addons-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-devel-matched-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-modules-extra-matched-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-modules-core-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-debuginfo-common-x86_64-7.0.9-205.fc44.x86_64.rpm
+書き込みが完了しました: /root/workspace/src/x86_64/kernel-debuginfo-7.0.9-205.fc44.x86_64.rpm
+
+[snip]
+```
+
+ビルドしたカーネルをインストールする。
+
+```sh
+dnf install --nogpgcheck kernel-core-7.0.9-205.fc44.x86_64.rpm kernel-modules-core-7.0.9-205.fc44.x86_64.rpm
+```
+
+LSA を初期化する。
+
+```sh
+ndctl zero-labels nmem0
+```
+
+```text
+zeroed 1 nmem
+```
+
+リージョンを作成する。
+
+```sh
+cxl create-region mem0 -m -d decoder0.0
+```
+
+```text
+[   79.237320] quadlet-generator[1265]: processing encountered some errors
+[  201.681019] cxl region0: Bypassing cpu_cache_invalidate_memregion() for testing!
+[  201.685748] cxl_pmem_region pmem_region0: mem0: invalid or missing serial number
+{
+  "region":"region0",
+  "resource":"0x490000000",
+  "size":"256.00 MiB (268.44 MB)",
+  "type":"pmem",
+  "interleave_ways":1,
+  "interleave_granularity":256,
+  "decode_state":"commit",
+  "mappings":[
+    {
+      "position":0,
+      "memdev":"mem0",
+      "decoder":"decoder2.0"
+    }
+  ],
+  "qos_class_mismatch":true
+}
+cxl region: cmd_create_region: created 1 region
+```
+
+ndctl でリージョンが見えない。
+
+```sh
+ndctl list -vvv
+```
+
+```json
+[
+  {
+    "provider":"CXL",
+    "dev":"ndbus0",
+    "dimms":[
+      {
+        "dev":"nmem0",
+        "id":"0",
+        "security":"disabled"
+      }
+    ]
+  }
+]
+```
+
 ## 参照
 
 - [Compute Express Link](https://www.qemu.org/docs/master/system/devices/cxl.html)
+- [Building a Custom Kernel](https://docs.fedoraproject.org/en-US/quick-docs/kernel-build-custom/)
+  - [Customizing kernel configuration](https://discussion.fedoraproject.org/t/customizing-kernel-configuration/122909/2)
