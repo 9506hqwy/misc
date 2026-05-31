@@ -1221,8 +1221,347 @@ node     0    1
    1:   20   10
 ```
 
+## Dynamic Capacity Device
+
+エミュレーション環境を起動する。
+
+- メモリ上に [CXL Type 3](https://github.com/qemu/qemu/commit/90de94612bb568117e038c6ce9edd35d17d239f9) DCD とする。
+- DCD は 2 リージョンとする。サイズは 256M x 2 リージョンの倍数として 1G とする。
+- CXL 対応の [PCIe Expander Bridge](https://github.com/qemu/qemu/commit/4f8db8711cbd27c9acf17e685987e9e74815e087) (pxb-cxl) を作成する。
+- [CXL Root Port](https://github.com/qemu/qemu/commit/d86d30192b7bc5a10fa6c82c073f55aea25f9291) (cxl-rp) を作成する。
+- [CXL Fixed Memory Windows](https://github.com/qemu/qemu/commit/03b39fcf64bc958e3223e1d696f9de06de904fc6) (CFMW) を作成する。
+
+```sh
+qemu-system-x86_64 \
+  -drive file=/root/disk.qcow2,format=qcow2,media=disk \
+  -m size=4G,slots=8,maxmem=8G \
+  -smp cores=2,sockets=1 \
+  -machine type=q35,nvdimm=on,cxl=on \
+  -net nic \
+  -net user,hostfwd=tcp::2222-:22 \
+  -nographic \
+  -qmp unix:/tmp/qmp.sock,server=on,wait=off \
+  -object memory-backend-ram,id=cxl-mem1,share=on,size=1G \
+  -device pxb-cxl,bus_nr=12,bus=pcie.0,id=cxl.1 \
+  -device cxl-rp,port=0,bus=cxl.1,id=root_port13,chassis=0,slot=2 \
+  -device cxl-type3,bus=root_port13,volatile-dc-memdev=cxl-mem1,num-dc-regions=2,id=cxl-dmem0 \
+  -M cxl-fmw.0.targets.0=cxl.1,cxl-fmw.0.size=4G
+```
+
+不揮発メモリの場合と同様に必要なソフトウェアをインストールする。
+
+バージョンを確認する。
+
+```sh
+uname -a
+```
+
+```text
+Linux localhost.localdomain 7.0.9-205.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Sat May 23 09:13:54 JST 2026 x86_64 GNU/Linux
+```
+
+デバイスを確認する。
+
+```sh
+lspci -tv
+```
+
+```text
+-+-[0000:00]-+-00.0  Intel Corporation 82G33/G31/P35/P31 Express DRAM Controller
+ |           +-01.0  Device 1234:1111
+ |           +-02.0  Intel Corporation 82574L Gigabit Network Connection
+ |           +-03.0  Red Hat, Inc. QEMU PCIe Expander bridge
+ |           +-1f.0  Intel Corporation 82801IB (ICH9) LPC Interface Controller
+ |           +-1f.2  Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6 port SATA Controller [AHCI mode]
+ |           \-1f.3  Intel Corporation 82801I (ICH9 Family) SMBus Controller
+ \-[0000:0c]---00.0-[0d]----00.0  Intel Corporation Device 0d93
+```
+
+```sh
+lspci -vvv
+```
+
+```text
+[snip]
+
+0d:00.0 CXL: Intel Corporation Device 0d93 (rev 01) (prog-if 10 [CXL Memory Device (CXL 2.0 or later)])
+        Subsystem: Red Hat, Inc. Device 1100
+        Physical Slot: 2
+        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B- DisINTx+
+        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+        Latency: 0
+        Region 0: Memory at fe800000 (64-bit, non-prefetchable) [size=64K]
+        Region 2: Memory at fe810000 (64-bit, non-prefetchable) [size=4K]
+        Region 4: Memory at fe811000 (32-bit, non-prefetchable) [size=4K]
+        Capabilities: [40] MSI-X: Enable+ Count=8 Masked-
+                Vector table: BAR=4 offset=00000000
+                PBA: BAR=4 offset=00000800
+        Capabilities: [80] Express (v2) Endpoint, IntMsgNum 0
+                DevCap: MaxPayload 128 bytes, PhantFunc 0, Latency L0s <64ns, L1 <1us
+                        ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 0W TEE-IO-
+                DevCtl: CorrErr+ NonFatalErr+ FatalErr+ UnsupReq+
+                        RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+                        MaxPayload 128 bytes, MaxReadReq 128 bytes
+                DevSta: CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr- TransPend-
+                LnkCap: Port #0, Speed 32GT/s, Width x16, ASPM L0s, Exit Latency L0s <64ns
+                        ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp-
+                LnkCtl: ASPM Disabled; RCB 64 bytes, LnkDisable- CommClk-
+                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt- FltModeDis-
+                LnkSta: Speed 32GT/s, Width x16
+                        TrErr- Train- SlotClk- DLActive- BWMgmt- ABWMgmt-
+                DevCap2: Completion Timeout: Not Supported, TimeoutDis- NROPrPrP- LTR-
+                         10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt+ EETLPPrefix+, MaxEETLPPrefixes 4
+                         EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
+                         FRS- TPHComp- ExtTPHComp-
+                         AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-
+                         AtomicOpsCtl: ReqEn-
+                         IDOReq- IDOCompl- LTR- EmergencyPowerReductionReq-
+                         10BitTagReq- OBFF Disabled, EETLPPrefixBlk-
+                LnkCap2: Supported Link Speeds: 2.5-32GT/s, Crosslink- Retimer- 2Retimers- DRS-
+                LnkCtl2: Target Link Speed: 32GT/s, EnterCompliance- SpeedDis-
+                         Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+                         Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
+                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+                         EqualizationPhase2- EqualizationPhase3- LinkEqualizationRequest-
+                         Retimer- 2Retimers- CrosslinkRes: unsupported, FltMode-
+        Capabilities: [100 v1] Designated Vendor-Specific: Vendor=1e98 ID=0000 Rev=3 Len=60: CXL
+                PCIe DVSEC for CXL Devices
+                CXLCap: Cache- IO+ Mem+ MemHWInit+ HDMCount 1 Viral-
+                CXLCtl: Cache- IO+ Mem+ CacheSFCov 0 CacheSFGran 0 CacheClean- Viral-
+                CXLSta: Viral-
+                CXLCtl2:        DisableCaching- InitCacheWB&Inval- InitRst- RstMemClrEn- DesiredVolatileHDMStateAfterHotReset-
+                CXLSta2:        ResetComplete+ ResetError- PMComplete-
+                CXLCap2:        Cache Size Not Reported
+                Range1: 0000000000000000-ffffffffffffffff [size=0x0]
+                        Valid+ Active+ Type=CDAT Class=CDAT interleave=0 timeout=1s
+                Range2: 0000000000000000-ffffffffffffffff [size=0x0]
+                        Valid- Active- Type=Volatile Class=DRAM interleave=0 timeout=1s
+                CXLCap3:        DefaultVolatile HDM State After:        ColdReset- WarmReset- HotReset- HotResetConfigurability-
+        Capabilities: [13c v1] Designated Vendor-Specific: Vendor=1e98 ID=0008 Rev=0 Len=36: CXL
+                Register Locator DVSEC
+                Block1: BIR: bar0, ID: component registers, offset: 0000000000000000
+                Block2: BIR: bar2, ID: CXL device registers, offset: 0000000000000000
+        Capabilities: [160 v1] Designated Vendor-Specific: Vendor=1e98 ID=0005 Rev=0 Len=16: CXL
+                GPF DVSEC for CXL Devices
+                GPF Phase 2 Duration: 3s
+                GPF Phase 2 Power: 51mW
+        Capabilities: [170 v1] Designated Vendor-Specific: Vendor=1e98 ID=0007 Rev=2 Len=32: CXL
+                PCIe DVSEC for Flex Bus Port
+                FBCap:  Cache- IO+ Mem+ 68BFlit+ MltLogDev- 256BFlit- PBRFlit-
+                FBCtl:  Cache- IO+ Mem- SynHdrByp- DrftBuf- 68BFlit- MltLogDev- RCD- Retimer1- Retimer2- 256BFlit- PBRFlit-
+                FBSta:  Cache- IO+ Mem+ SynHdrByp- DrftBuf- 68BFlit+ MltLogDev- 256BFlit- PBRFlit-
+                FBModTS:        Received FB Data: 0000ef
+                FBCap2: NOPHint-
+                FBCtl2: NOPHint-
+                FBSta2: NOPHintInfo: 0
+        Capabilities: [190 v1] Data Object Exchange
+                DOECap: IntSup+
+                        IntMsgNum 0
+                DOECtl: IntEn-
+                DOESta: Busy- IntSta- Error- ObjectReady-
+        Capabilities: [200 v2] Advanced Error Reporting
+                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP-
+                        ECRC- UnsupReq- ACSViol- UncorrIntErr- BlockedTLP- AtomicOpBlocked- TLPBlockedErr-
+                        PoisonTLPBlocked- DMWrReqBlocked- IDECheck- MisIDETLP- PCRC_CHECK- TLPXlatBlocked-
+                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP-
+                        ECRC- UnsupReq- ACSViol- UncorrIntErr+ BlockedTLP- AtomicOpBlocked- TLPBlockedErr+
+                        PoisonTLPBlocked- DMWrReqBlocked- IDECheck- MisIDETLP- PCRC_CHECK- TLPXlatBlocked-
+                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+
+                        ECRC- UnsupReq- ACSViol- UncorrIntErr+ BlockedTLP- AtomicOpBlocked- TLPBlockedErr-
+                        PoisonTLPBlocked- DMWrReqBlocked- IDECheck- MisIDETLP- PCRC_CHECK- TLPXlatBlocked-
+                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr- CorrIntErr- HeaderOF-
+                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+ CorrIntErr+ HeaderOF+
+                AERCap: First Error Pointer: 00, ECRCGenCap+ ECRCGenEn- ECRCChkCap+ ECRCChkEn-
+                        MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+                HeaderLog: 00000000 00000000 00000000 00000000
+        Kernel driver in use: cxl_pci
+        Kernel modules: cxl_pci
+```
+
+CXL デバイスを確認する。
+
+```sh
+cxl list -vvv
+```
+
+```json
+[
+  {
+    "bus":"root0",
+    "provider":"ACPI.CXL",
+    "injectable_protocol_errors":[],
+    "nr_dports":1,
+    "dports":[
+      {
+        "dport":"pci0000:0c",
+        "alias":"ACPI0016:00",
+        "id":12,
+        "protocol_injectable":false
+      }
+    ],
+    "ports:root0":[
+      {
+        "port":"port1",
+        "host":"pci0000:0c",
+        "depth":1,
+        "decoders_committed":0,
+        "nr_dports":1,
+        "dports":[
+          {
+            "dport":"0000:0c:00.0",
+            "id":0,
+            "protocol_injectable":false
+          }
+        ],
+        "endpoints:port1":[
+          {
+            "endpoint":"endpoint2",
+            "host":"mem0",
+            "parent_dport":"0000:0c:00.0",
+            "depth":2,
+            "decoders_committed":0,
+            "memdev":{
+              "memdev":"mem0",
+              "ram_size":1,
+              "ram_qos_class":0,
+              "alert_config":{
+                "life_used_prog_warn_threshold_valid":false,
+                "dev_over_temperature_prog_warn_threshold_valid":false,
+                "dev_under_temperature_prog_warn_threshold_valid":false,
+                "corrected_volatile_mem_err_prog_warn_threshold_valid":false,
+                "corrected_pmem_err_prog_warn_threshold_valid":false,
+                "life_used_prog_warn_threshold_writable":false,
+                "dev_over_temperature_prog_warn_threshold_writable":false,
+                "dev_under_temperature_prog_warn_threshold_writable":false,
+                "corrected_volatile_mem_err_prog_warn_threshold_writable":false,
+                "corrected_pmem_err_prog_warn_threshold_writable":false,
+                "life_used_crit_alert_threshold":75,
+                "life_used_prog_warn_threshold":40,
+                "dev_over_temperature_crit_alert_threshold":35,
+                "dev_under_temperature_crit_alert_threshold":10,
+                "dev_over_temperature_prog_warn_threshold":25,
+                "dev_under_temperature_prog_warn_threshold":20,
+                "corrected_volatile_mem_err_prog_warn_threshold":0,
+                "corrected_pmem_err_prog_warn_threshold":0
+              },
+              "serial":0,
+              "host":"0000:0d:00.0",
+              "firmware_version":"BWFW VERSION 00",
+              "poison_injectable":true,
+              "partition_info":{
+                "total_size":0,
+                "volatile_only_size":0,
+                "persistent_only_size":0,
+                "partition_alignment_size":0
+              },
+              "firmware":{
+                "num_slots":2,
+                "active_slot":1,
+                "online_activate_capable":true,
+                "slot_1_version":"BWFW VERSION 0",
+                "fw_update_in_progress":false
+              }
+            },
+            "decoders:endpoint2":[
+              {
+                "decoder":"decoder2.0",
+                "interleave_ways":1,
+                "state":"disabled"
+              },
+              {
+                "decoder":"decoder2.1",
+                "interleave_ways":1,
+                "state":"disabled"
+              },
+              {
+                "decoder":"decoder2.2",
+                "interleave_ways":1,
+                "state":"disabled"
+              },
+              {
+                "decoder":"decoder2.3",
+                "interleave_ways":1,
+                "state":"disabled"
+              }
+            ]
+          }
+        ],
+        "decoders:port1":[
+          {
+            "decoder":"decoder1.0",
+            "interleave_ways":1,
+            "state":"disabled",
+            "nr_targets":1,
+            "targets":[
+              {
+                "target":"0000:0c:00.0",
+                "position":0,
+                "id":0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "decoders:root0":[
+      {
+        "decoder":"decoder0.0",
+        "resource":19595788288,
+        "size":4294967296,
+        "interleave_ways":1,
+        "max_available_extent":4294967296,
+        "pmem_capable":true,
+        "volatile_capable":true,
+        "accelmem_capable":true,
+        "qos_class":0,
+        "nr_targets":1,
+        "targets":[
+          {
+            "target":"pci0000:0c",
+            "alias":"ACPI0016:00",
+            "position":0,
+            "id":12
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+QEMU ホストでエクステントを追加する。
+
+```sh
+socat UNIX-CONNECT:/tmp/qmp.sock STDIO
+```
+
+```json
+{ "execute": "qmp_capabilities" }
+{"return": {}}
+
+{ "execute": "cxl-add-dynamic-capacity",
+  "arguments": {
+    "path": "/machine/peripheral/cxl-dmem0",
+    "host-id": 0,
+    "selection-policy": "prescriptive",
+    "region": 0,
+    "extents": [
+      {
+        "offset": 0,
+        "len": 134217728
+      }
+    ]
+  }
+}
+{"return": {}}
+```
+
+リージョンが作成できない。
+
 ## 参照
 
 - [Compute Express Link](https://www.qemu.org/docs/master/system/devices/cxl.html)
 - [Building a Custom Kernel](https://docs.fedoraproject.org/en-US/quick-docs/kernel-build-custom/)
   - [Customizing kernel configuration](https://discussion.fedoraproject.org/t/customizing-kernel-configuration/122909/2)
+- [QMP Index](https://www.qemu.org/docs/master/qapi-qmp-index.html)
