@@ -1147,6 +1147,75 @@ cxl region: cmd_create_region: created 1 region
 [  601.519869] Demotion targets for Node 1: null
 ```
 
+コマンドの内部で下記が実行される。
+
+リージョンを作成する。
+
+```sh
+echo region0 > /sys/bus/cxl/devices/decoder0.0/create_ram_region
+```
+
+粒度を設定する。
+
+```sh
+echo 256 > /sys/bus/cxl/devices/decoder0.0/region0/interleave_granularity
+```
+
+インターリブ数を設定する。
+
+```sh
+echo 1 > /sys/bus/cxl/devices/decoder0.0/region0/interleave_ways
+```
+
+サイズを設定する。
+
+```sh
+echo 268435456 > /sys/bus/cxl/devices/decoder0.0/region0/size
+```
+
+エンドポイントデコーダを設定する。
+
+```sh
+echo 0 > /sys/bus/cxl/devices/decoder2.0/dpa_size
+echo ram > /sys/bus/cxl/devices/decoder2.0/mode
+echo 268435456 > /sys/bus/cxl/devices/decoder2.0/dpa_size
+```
+
+ターゲットを設定する。
+
+```sh
+echo decoder2.0 > /sys/bus/cxl/devices/decoder0.0/region0/target0
+```
+
+設定を適用する。
+
+```sh
+echo 1 > /sys/bus/cxl/devices/decoder0.0/region0/commit
+```
+
+```text
+[  636.652790] cxl region0: Bypassing cpu_cache_invalidate_memregion() for testing!
+```
+
+バインドする。
+
+```sh
+echo region0 > /sys/bus/cxl/drivers/cxl_region/bind
+```
+
+NUMA ノードが作成されシステムメモリに追加される。
+
+```text
+[  750.986486] Built 1 zonelists, mobility grouping on.  Total pages: 973788
+[  750.987984] Policy zone: Normal
+[  751.009549] Fallback order for Node 0: 0 1
+[  751.009625] Fallback order for Node 1: 1 0
+[  751.009640] Built 2 zonelists, mobility grouping on.  Total pages: 1006556
+[  751.015492] Policy zone: Normal
+[  751.044897] Demotion targets for Node 0: preferred: 1, fallback: 1
+[  751.046194] Demotion targets for Node 1: null
+```
+
 リージョンを確認する。
 
 ```sh
